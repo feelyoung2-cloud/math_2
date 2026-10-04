@@ -1,0 +1,80 @@
+{
+  "entities": {
+    "Settings": {
+      "title": "Settings",
+      "description": "Class configuration and hashed credentials",
+      "type": "object",
+      "properties": {
+        "classPasswordHash": { "type": "string" },
+        "teacherPasswordHash": { "type": "string" },
+        "grade": { "type": "number" },
+        "classNum": { "type": "number" },
+        "initialSetupDone": { "type": "boolean" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["classPasswordHash", "teacherPasswordHash"]
+    },
+    "Student": {
+      "title": "Student",
+      "description": "Student identity and hashed personal password",
+      "type": "object",
+      "properties": {
+        "studentKey": { "type": "string" },
+        "grade": { "type": "number" },
+        "classNum": { "type": "number" },
+        "studentNumber": { "type": "number" },
+        "name": { "type": "string" },
+        "passwordHash": { "type": "string" },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["studentKey", "grade", "classNum", "studentNumber", "name", "passwordHash"]
+    },
+    "Record": {
+      "title": "Record",
+      "description": "Student high scores, game counts, and cumulative wrong answer statistics",
+      "type": "object",
+      "properties": {
+        "studentKey": { "type": "string" },
+        "name": { "type": "string" },
+        "grade": { "type": "number" },
+        "classNum": { "type": "number" },
+        "studentNumber": { "type": "number" },
+        "highScore": { "type": "number" },
+        "totalGames": { "type": "number" },
+        "wrongCounts": { "type": "object" },
+        "lastPlayedAt": { "type": "string" },
+        "recentFeedback": { "type": "string" }
+      },
+      "required": ["studentKey", "name", "highScore", "totalGames"]
+    },
+    "Diagnostic": {
+      "title": "Diagnostic",
+      "description": "Diagnostic probe document for validating Firestore CRUD",
+      "type": "object",
+      "properties": {
+        "ping": { "type": "string" },
+        "timestamp": { "type": "number" }
+      },
+      "required": ["ping", "timestamp"]
+    }
+  },
+  "firestore": {
+    "/settings/{settingId}": {
+      "schema": "Settings",
+      "description": "Class configuration and hashed credentials"
+    },
+    "/students/{studentKey}": {
+      "schema": "Student",
+      "description": "Student profiles and hashed passwords"
+    },
+    "/records/{studentKey}": {
+      "schema": "Record",
+      "description": "Student gameplay records and error statistics"
+    },
+    "/_diagnostics/{testId}": {
+      "schema": "Diagnostic",
+      "description": "Diagnostic probe documents for validating Firestore CRUD"
+    }
+  }
+}

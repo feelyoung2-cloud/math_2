@@ -1,0 +1,39 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Default deny for unlisted documents
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Settings collection (Class common password & Teacher admin password hashes)
+    match /settings/{settingId} {
+      allow read: if true;
+      allow write: if true;
+    }
+
+    // Students collection (Student profiles and hashed passwords)
+    match /students/{studentKey} {
+      allow read: if true;
+      allow create, update: if request.resource.data.studentKey is string
+                            && request.resource.data.name is string
+                            && request.resource.data.passwordHash is string;
+      allow delete: if true;
+    }
+
+    // Records collection (Game records, high score, wrong problem counts)
+    match /records/{studentKey} {
+      allow read: if true;
+      allow write: if request.resource.data.studentKey is string
+                   && request.resource.data.name is string
+                   && request.resource.data.highScore is number;
+      allow delete: if true;
+    }
+
+    // Diagnostics collection (Live CRUD verification for teacher admin dashboard)
+    match /_diagnostics/{testId} {
+      allow read, write, delete: if true;
+    }
+  }
+}
